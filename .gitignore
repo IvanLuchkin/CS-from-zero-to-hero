@@ -1,0 +1,5 @@
+/hibernate-cinema.iml
+/.idea/
+target/*
+out/*
+lib*
