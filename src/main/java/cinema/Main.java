@@ -1,9 +1,12 @@
 package cinema;
 
+import cinema.exception.AuthenticationException;
 import cinema.injections.Injector;
 import cinema.model.CinemaHall;
 import cinema.model.Movie;
 import cinema.model.MovieSession;
+import cinema.model.User;
+import cinema.security.AuthenticationService;
 import cinema.service.CinemaHallService;
 import cinema.service.MovieService;
 import cinema.service.MovieSessionService;
@@ -19,8 +22,10 @@ public class Main {
             (MovieSessionService) injector.getInstance(MovieSessionService.class);
     private static final CinemaHallService cinemaHallService =
             (CinemaHallService) injector.getInstance(CinemaHallService.class);
+    private static final AuthenticationService authService =
+            (AuthenticationService) injector.getInstance(AuthenticationService.class);
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws AuthenticationException {
         Movie movie = new Movie();
         movie.setTitle("El Camino: Breaking Bad");
         movie.setDescription("A logical ending to the Breaking Bad series");
@@ -44,5 +49,9 @@ public class Main {
         System.out.println("Requested date: " + requestedDate);
         List<MovieSession> res = movieSessionService.findAvailableSessions(1L, requestedDate);
         System.out.println(res);
+
+        User newUser = authService.register("test@gmail.com", "1234");
+        User actualUser = authService.login("test@gmail.com", "1234");
+        System.out.println(actualUser);
     }
 }
