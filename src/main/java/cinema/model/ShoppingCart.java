@@ -20,6 +20,7 @@ public class ShoppingCart {
     @JoinTable(name = "carts_tickets",
             joinColumns = {@JoinColumn(name = "cart_id")},
             inverseJoinColumns = @JoinColumn(name = "ticket_id"))
+
     private List<Ticket> tickets;
     @OneToOne
     @MapsId
