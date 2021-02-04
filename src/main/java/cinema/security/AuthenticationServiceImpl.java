@@ -5,6 +5,7 @@ import cinema.injections.Inject;
 import cinema.injections.Service;
 import cinema.model.User;
 import cinema.security.util.PasswordEncoder;
+import cinema.service.ShoppingCartService;
 import cinema.service.UserService;
 import java.util.Optional;
 
@@ -12,6 +13,8 @@ import java.util.Optional;
 public class AuthenticationServiceImpl implements AuthenticationService {
     @Inject
     private UserService userService;
+    @Inject
+    private ShoppingCartService shoppingCartService;
     @Inject
     private PasswordEncoder passwordEncoder;
 
@@ -27,6 +30,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     public User register(String email, String password) {
-        return userService.add(new User(email, password));
+        User user = userService.add(new User(email, password));
+        shoppingCartService.registerNewShoppingCart(user);
+        return user;
     }
 }

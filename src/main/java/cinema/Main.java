@@ -10,6 +10,7 @@ import cinema.security.AuthenticationService;
 import cinema.service.CinemaHallService;
 import cinema.service.MovieService;
 import cinema.service.MovieSessionService;
+import cinema.service.ShoppingCartService;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -24,6 +25,8 @@ public class Main {
             (CinemaHallService) injector.getInstance(CinemaHallService.class);
     private static final AuthenticationService authService =
             (AuthenticationService) injector.getInstance(AuthenticationService.class);
+    private static final ShoppingCartService shoppingCartService =
+            (ShoppingCartService) injector.getInstance(ShoppingCartService.class);
 
     public static void main(String[] args) throws AuthenticationException {
         Movie movie = new Movie();
@@ -53,5 +56,8 @@ public class Main {
         User newUser = authService.register("test@gmail.com", "1234");
         User actualUser = authService.login("test@gmail.com", "1234");
         System.out.println(actualUser);
+
+        shoppingCartService.addSession(session, newUser);
+        System.out.println("Received SC: " + shoppingCartService.getByUser(newUser));
     }
 }
