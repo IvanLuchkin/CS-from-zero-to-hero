@@ -52,6 +52,14 @@ public class Main {
         session.setShowTime(timeOfSession);
         movieSessionService.add(session);
 
+        MovieSession session1 = new MovieSession();
+        session1.setMovie(movie);
+        session1.setCinemaHall(hall);
+        LocalDateTime timeOfSession1 = LocalDateTime.now().plusHours(2);
+        System.out.println("Time of session: " + timeOfSession);
+        session1.setShowTime(timeOfSession1);
+        movieSessionService.add(session1);
+
         LocalDate requestedDate = LocalDate.now();
         System.out.println("Requested date: " + requestedDate);
         List<MovieSession> res = movieSessionService.findAvailableSessions(1L, requestedDate);
@@ -62,10 +70,11 @@ public class Main {
         System.out.println(actualUser);
 
         shoppingCartService.addSession(session, newUser);
+        shoppingCartService.addSession(session1, newUser);
         ShoppingCart cartFromDB = shoppingCartService.getByUser(newUser);
         System.out.println("Received SC: " + cartFromDB);
 
         orderService.completeOrder(cartFromDB);
-        System.out.println(orderService.getOrdersHistory(newUser));
+        orderService.getOrdersHistory(newUser).forEach(System.out::println);
     }
 }
