@@ -5,11 +5,13 @@ import cinema.injections.Injector;
 import cinema.model.CinemaHall;
 import cinema.model.Movie;
 import cinema.model.MovieSession;
+import cinema.model.ShoppingCart;
 import cinema.model.User;
 import cinema.security.AuthenticationService;
 import cinema.service.CinemaHallService;
 import cinema.service.MovieService;
 import cinema.service.MovieSessionService;
+import cinema.service.OrderService;
 import cinema.service.ShoppingCartService;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -27,6 +29,8 @@ public class Main {
             (AuthenticationService) injector.getInstance(AuthenticationService.class);
     private static final ShoppingCartService shoppingCartService =
             (ShoppingCartService) injector.getInstance(ShoppingCartService.class);
+    private static final OrderService orderService =
+            (OrderService) injector.getInstance(OrderService.class);
 
     public static void main(String[] args) throws AuthenticationException {
         Movie movie = new Movie();
@@ -48,6 +52,14 @@ public class Main {
         session.setShowTime(timeOfSession);
         movieSessionService.add(session);
 
+        MovieSession session1 = new MovieSession();
+        session1.setMovie(movie);
+        session1.setCinemaHall(hall);
+        LocalDateTime timeOfSession1 = LocalDateTime.now().plusHours(2);
+        System.out.println("Time of session: " + timeOfSession);
+        session1.setShowTime(timeOfSession1);
+        movieSessionService.add(session1);
+
         LocalDate requestedDate = LocalDate.now();
         System.out.println("Requested date: " + requestedDate);
         List<MovieSession> res = movieSessionService.findAvailableSessions(1L, requestedDate);
@@ -58,6 +70,11 @@ public class Main {
         System.out.println(actualUser);
 
         shoppingCartService.addSession(session, newUser);
-        System.out.println("Received SC: " + shoppingCartService.getByUser(newUser));
+        shoppingCartService.addSession(session1, newUser);
+        ShoppingCart cartFromDB = shoppingCartService.getByUser(newUser);
+        System.out.println("Received SC: " + cartFromDB);
+
+        orderService.completeOrder(cartFromDB);
+        orderService.getOrdersHistory(newUser).forEach(System.out::println);
     }
 }
