@@ -4,6 +4,7 @@ import cinema.dao.MovieDao;
 import cinema.exception.DataProcessingException;
 import cinema.model.Movie;
 import java.util.List;
+import java.util.Optional;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -38,6 +39,15 @@ public class MovieDaoImpl implements MovieDao {
             if (session != null) {
                 session.close();
             }
+        }
+    }
+
+    @Override
+    public Optional<Movie> getById(Long id) {
+        try (Session session = sessionFactory.openSession()) {
+            return Optional.ofNullable(session.get(Movie.class, id));
+        } catch (Exception e) {
+            throw new DataProcessingException("Could not get movie by id " + id, e);
         }
     }
 
