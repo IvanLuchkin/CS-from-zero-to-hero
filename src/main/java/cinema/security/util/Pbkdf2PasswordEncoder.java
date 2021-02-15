@@ -1,13 +1,13 @@
 package cinema.security.util;
 
-import cinema.injections.Service;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
+import org.springframework.stereotype.Component;
 
-@Service
+@Component
 public class Pbkdf2PasswordEncoder implements PasswordEncoder {
     private static final String ALGORITHM = "PBKDF2WithHmacSHA1";
 

@@ -1,7 +1,7 @@
 package cinema;
 
+import cinema.config.AppConfig;
 import cinema.exception.AuthenticationException;
-import cinema.injections.Injector;
 import cinema.model.CinemaHall;
 import cinema.model.Movie;
 import cinema.model.MovieSession;
@@ -16,29 +16,21 @@ import cinema.service.ShoppingCartService;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 public class Main {
-    private static final Injector injector = Injector.getInstance("cinema");
-    private static final MovieService movieService =
-            (MovieService) injector.getInstance(MovieService.class);
-    private static final MovieSessionService movieSessionService =
-            (MovieSessionService) injector.getInstance(MovieSessionService.class);
-    private static final CinemaHallService cinemaHallService =
-            (CinemaHallService) injector.getInstance(CinemaHallService.class);
-    private static final AuthenticationService authService =
-            (AuthenticationService) injector.getInstance(AuthenticationService.class);
-    private static final ShoppingCartService shoppingCartService =
-            (ShoppingCartService) injector.getInstance(ShoppingCartService.class);
-    private static final OrderService orderService =
-            (OrderService) injector.getInstance(OrderService.class);
-
     public static void main(String[] args) throws AuthenticationException {
+        AnnotationConfigApplicationContext appContext =
+                new AnnotationConfigApplicationContext(AppConfig.class);
+
+        MovieService movieService = appContext.getBean(MovieService.class);
         Movie movie = new Movie();
         movie.setTitle("El Camino: Breaking Bad");
         movie.setDescription("A logical ending to the Breaking Bad series");
         movieService.add(movie);
         movieService.getAll().forEach(System.out::println);
 
+        CinemaHallService cinemaHallService = appContext.getBean(CinemaHallService.class);
         CinemaHall hall = new CinemaHall();
         hall.setCapacity(50);
         hall.setDescription("test hall");
@@ -47,33 +39,32 @@ public class Main {
         MovieSession session = new MovieSession();
         session.setMovie(movie);
         session.setCinemaHall(hall);
-        LocalDateTime timeOfSession = LocalDateTime.now();
-        System.out.println("Time of session: " + timeOfSession);
-        session.setShowTime(timeOfSession);
+        session.setShowTime(LocalDateTime.now());
+        MovieSessionService movieSessionService = appContext.getBean(MovieSessionService.class);
         movieSessionService.add(session);
 
         MovieSession session1 = new MovieSession();
         session1.setMovie(movie);
         session1.setCinemaHall(hall);
-        LocalDateTime timeOfSession1 = LocalDateTime.now().plusHours(2);
-        System.out.println("Time of session: " + timeOfSession);
-        session1.setShowTime(timeOfSession1);
+        session1.setShowTime(LocalDateTime.now().plusHours(2));
         movieSessionService.add(session1);
 
         LocalDate requestedDate = LocalDate.now();
-        System.out.println("Requested date: " + requestedDate);
         List<MovieSession> res = movieSessionService.findAvailableSessions(1L, requestedDate);
         System.out.println(res);
 
+        AuthenticationService authService = appContext.getBean(AuthenticationService.class);
         User newUser = authService.register("test@gmail.com", "1234");
         User actualUser = authService.login("test@gmail.com", "1234");
         System.out.println(actualUser);
 
+        ShoppingCartService shoppingCartService = appContext.getBean(ShoppingCartService.class);
         shoppingCartService.addSession(session, newUser);
         shoppingCartService.addSession(session1, newUser);
         ShoppingCart cartFromDB = shoppingCartService.getByUser(newUser);
         System.out.println("Received SC: " + cartFromDB);
 
+        OrderService orderService = appContext.getBean(OrderService.class);
         orderService.completeOrder(cartFromDB);
         orderService.getOrdersHistory(newUser).forEach(System.out::println);
     }
