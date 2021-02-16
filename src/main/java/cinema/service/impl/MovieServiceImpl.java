@@ -22,6 +22,12 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
+    public Movie getById(Long id) {
+        return movieDao.getById(id).orElseThrow(() ->
+                new RuntimeException("Movie " + id + " not found"));
+    }
+
+    @Override
     public List<Movie> getAll() {
         return movieDao.getAll();
     }
