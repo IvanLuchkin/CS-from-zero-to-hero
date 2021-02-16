@@ -28,6 +28,12 @@ public class MovieSessionServiceImpl implements MovieSessionService {
     }
 
     @Override
+    public MovieSession get(Long id) {
+        return movieSessionDao.getById(id).orElseThrow(() ->
+                new RuntimeException("Movie session " + id + " does not exist"));
+    }
+
+    @Override
     public void delete(Long id) {
         movieSessionDao.delete(id);
     }
