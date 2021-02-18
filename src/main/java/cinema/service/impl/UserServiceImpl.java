@@ -2,11 +2,10 @@ package cinema.service.impl;
 
 import cinema.dao.UserDao;
 import cinema.model.User;
-import cinema.security.util.PasswordEncoder;
 import cinema.service.UserService;
-import java.security.SecureRandom;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -22,10 +21,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User add(User user) {
-        byte[] salt = new byte[16];
-        new SecureRandom().nextBytes(salt);
-        user.setPassword(passwordEncoder.getHash(user.getPassword(), salt));
-        user.setSalt(salt);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userDao.add(user);
     }
 

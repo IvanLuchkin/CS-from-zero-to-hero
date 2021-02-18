@@ -1,7 +1,12 @@
 package cinema.model.dto.cinemahall;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
+
 public class CinemaHallRequestDto {
+    @Positive
     private int capacity;
+    @NotNull
     private String description;
 
     public int getCapacity() {
