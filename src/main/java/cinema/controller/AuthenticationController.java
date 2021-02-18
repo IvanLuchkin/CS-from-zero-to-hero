@@ -23,7 +23,6 @@ public class AuthenticationController {
 
     @PostMapping("/register")
     public UserResponseDto register(@RequestBody @Valid UserRequestDto userRequestDto) {
-        System.out.println();
         return userMapper.mapToUserResponseDto(
                 authService.register(userRequestDto.getEmail(), userRequestDto.getPassword()));
     }
