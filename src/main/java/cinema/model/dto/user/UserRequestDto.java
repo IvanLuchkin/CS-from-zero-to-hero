@@ -2,8 +2,6 @@ package cinema.model.dto.user;
 
 import cinema.validation.ValidateEmail;
 import cinema.validation.ValidatePassword;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
 @ValidatePassword.List({
         @ValidatePassword(
