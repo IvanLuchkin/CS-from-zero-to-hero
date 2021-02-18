@@ -15,8 +15,6 @@ import javax.validation.constraints.Size;
 public class UserRequestDto {
     @ValidateEmail
     private String email;
-    @Size(max = 50)
-    @NotNull
     private String password;
     private String repeatPassword;
 
