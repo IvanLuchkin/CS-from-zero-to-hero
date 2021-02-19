@@ -1,8 +1,28 @@
 package cinema.model.dto.user;
 
+import cinema.validation.ValidateEmail;
+import cinema.validation.ValidatePassword;
+
+@ValidatePassword.List({
+        @ValidatePassword(
+                field = "password",
+                fieldMatch = "repeatPassword",
+                message = "Passwords don't match."
+        )
+})
 public class UserRequestDto {
+    @ValidateEmail
     private String email;
     private String password;
+    private String repeatPassword;
+
+    public String getRepeatPassword() {
+        return repeatPassword;
+    }
+
+    public void setRepeatPassword(String repeatPassword) {
+        this.repeatPassword = repeatPassword;
+    }
 
     public String getEmail() {
         return email;
