@@ -1,11 +1,13 @@
 package cinema.model;
 
+import java.util.List;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -17,7 +19,8 @@ public class User {
     @Column(unique = true)
     private String email;
     private String password;
-    private byte[] salt;
+    @ManyToMany
+    private List<Role> roles;
 
     public User(String email, String password) {
         this.email = email;
@@ -25,6 +28,14 @@ public class User {
     }
 
     public User() {
+    }
+
+    public List<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<Role> roles) {
+        this.roles = roles;
     }
 
     public Long getId() {
@@ -52,11 +63,6 @@ public class User {
     }
 
     @Override
-    public String toString() {
-        return "User{id=" + id + "}";
-    }
-
-    @Override
     public boolean equals(Object o) {
         if (this == o) {
             return true;
@@ -66,19 +72,19 @@ public class User {
         }
         User user = (User) o;
         return id.equals(user.id) && email.equals(user.email)
-                && password.equals(user.password);
+                && password.equals(user.password) && roles.equals(user.roles);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, email, password);
+        return Objects.hash(id, email, password, roles);
     }
 
-    public byte[] getSalt() {
-        return salt;
-    }
-
-    public void setSalt(byte[] salt) {
-        this.salt = salt;
+    @Override
+    public String toString() {
+        return "User{"
+                + "id=" + id
+                + ", roles=" + roles
+                + '}';
     }
 }
