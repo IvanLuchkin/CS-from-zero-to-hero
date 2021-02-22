@@ -18,7 +18,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @ComponentScan(basePackages = {
         "cinema.service",
         "cinema.dao",
-        "cinema.security"
+        "cinema.security",
+        "cinema.util"
 })
 public class AppConfig {
     private final Environment environment;
