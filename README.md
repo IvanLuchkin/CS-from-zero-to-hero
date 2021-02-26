@@ -1,11 +1,11 @@
-#CS: From Zero To Hero
+# CS: From Zero To Hero
 This is a simple web-application that allows you to purchase a ticket to the intensive course. The topics of the courses
 are related to various fields of computer science, and the main goal is to provide the most useful knowledge in the shortest
 term possible.
 
-##Structure
+## Structure
 
-#### This project has multi-layer architecture and consists of:
+#### This project has a multi-layer architecture and consists of:
 * Database layer
 * DAO layer
 * Service layer
@@ -14,7 +14,7 @@ term possible.
 Communication between back-end and front-end is performed via DTO and JSON. 
 ## Available functionality
 
-###User
+### User
 * Register in the system
 * Log in to the system
 * Browse available topics
@@ -22,7 +22,7 @@ Communication between back-end and front-end is performed via DTO and JSON.
 * Add multiple tickets to the shopping cart
 * Place an order
 
-###Admin
+### Admin
 
 * View the information about registered users
 * Add new bootcamps
